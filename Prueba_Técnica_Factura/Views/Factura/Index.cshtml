@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Prueba_Técnica_Factura.Models.Factura>
+
+@{
+    ViewData["Title"] = "Listado de Facturas";
+}
+
+<h2>Listado de Facturas</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">+ Nueva Factura</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var factura in Model)
+        {
+            <tr>
+                <td>@factura.FacturaID</td>
+                <td>@factura.Cliente?.Nombre</td>
+                <td>@factura.Fecha.ToString("dd/MM/yyyy")</td>
+                <td>$@factura.Total.ToString("F2")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@factura.FacturaID" class="btn btn-info btn-sm">Ver</a>
+                    <a asp-action="Edit" asp-route-id="@factura.FacturaID" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@factura.FacturaID" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
