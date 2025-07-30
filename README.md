@@ -1,4 +1,4 @@
-\# 🧾 Sistema de Facturación MVC
+\# Sistema de Facturación MVC
 
 Este es un sistema de facturación desarrollado como parte de una prueba
 técnica, utilizando ASP.NET Core MVC, Entity Framework Core y SQL
