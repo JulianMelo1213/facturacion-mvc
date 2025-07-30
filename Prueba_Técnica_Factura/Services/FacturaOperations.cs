@@ -2,7 +2,6 @@
 using Prueba_Técnica_Factura.Data;
 using Prueba_Técnica_Factura.Models;
 
-
 namespace Prueba_Técnica_Factura.Services
 {
     public class FacturaOperations
@@ -20,7 +19,7 @@ namespace Prueba_Técnica_Factura.Services
             return await _context.Facturas
                 .Include(f => f.Cliente)
                 .Include(f => f.Detalles)
-                .ThenInclude(d => d.Producto)
+                    .ThenInclude(d => d.Producto)
                 .ToListAsync();
         }
 
@@ -28,14 +27,14 @@ namespace Prueba_Técnica_Factura.Services
         {
             return await _context.Facturas
                 .Include(f => f.Cliente)
-                .Include (f => f.Detalles)
-                    .ThenInclude (d => d.Producto)
+                .Include(f => f.Detalles)
+                    .ThenInclude(d => d.Producto)
                 .FirstOrDefaultAsync(f => f.FacturaID == id);
         }
 
-        public async Task CreateAsync(Factura factura)
+        public async Task<Factura> CreateAsync(Factura factura)
         {
-            // Calculo atumatico del total
+            // Cálculo automático del total
             foreach (var detalle in factura.Detalles)
             {
                 detalle.Total = detalle.Cantidad * detalle.PrecioUnitario;
@@ -45,11 +44,12 @@ namespace Prueba_Técnica_Factura.Services
 
             _context.Facturas.Add(factura);
             await _context.SaveChangesAsync();
+
+            return factura; // Devuelve la entidad creada
         }
 
         public async Task UpdateAsync(Factura factura)
         {
-            // Buscar la factura actual con sus detalles
             var existingFactura = await _context.Facturas
                 .Include(f => f.Detalles)
                 .FirstOrDefaultAsync(f => f.FacturaID == factura.FacturaID);
@@ -75,13 +75,18 @@ namespace Prueba_Técnica_Factura.Services
 
         public async Task DeleteAsync(int id)
         {
-            var factura = await _context.Facturas.FindAsync(id);
+            var factura = await _context.Facturas
+                .Include(f => f.Detalles)
+                .FirstOrDefaultAsync(f => f.FacturaID == id);
+
             if (factura != null)
             {
+                _context.DetalleFacturas.RemoveRange(factura.Detalles);
                 _context.Facturas.Remove(factura);
                 await _context.SaveChangesAsync();
             }
         }
+
         public async Task<Cliente?> GetClienteByIdAsync(int id)
         {
             return await _context.Clientes.FindAsync(id);
