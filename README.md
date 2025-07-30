@@ -12,24 +12,38 @@ totales por producto y factura.
 \## Características
 
 \- CRUD de Facturas - Relación entre Cliente → Factura → Detalles →
-Productos - Cálculo dinámico de precios (precio mayorista si cantidad \>
-12) - Validaciones de formulario (cliente requerido, al menos un
-detalle) - Precio unitario autocompletado y protegido según reglas -
-Confirmación de eliminación
+Productos 
+\- Cálculo dinámico de precios (precio mayorista si cantidad \>
+12) 
+\- Validaciones de formulario (cliente requerido, al menos un
+detalle) 
+\- Precio unitario autocompletado y protegido según reglas 
+\-Confirmación de eliminación
 
 \-\--
 
 \## Tecnologías Usadas
 
-\- ASP.NET Core  - MVC Architecture - Entity Framework Core - SQL
-Server - HTML, CSS y Javascript
+\- ASP.NET Core  
+\- MVC Architecture 
+\- Entity Framework Core 
+\- SQL
+Server 
+\- HTML, CSS y Javascript
 
 \-\--
 
 \## Estructura del Proyecto
 
-Prueba_Técnica_Factura/ -Controllers/ -Models/ -Services/ -Views/
--wwwroot/ -Program.cs -appsettings.json -script_facturacionDB.sql
+Prueba_Técnica_Factura/ 
+\-Controllers/ 
+\-Models/ 
+\-Services/ 
+\-Views/
+\-wwwroot/ 
+\-Program.cs 
+\-appsettings.json 
+\-script_facturacionDB.sql
 
 \-\--
 
@@ -52,4 +66,4 @@ prueba
 \"ConnectionStrings\": { \"DefaultConnection\":
 \"Server=.;Database=facturacionDB;Trusted_Connection=True;MultipleActiveResultSets=true\"
 } 
-5. Ejecuta la aplicación
+5\. Ejecuta la aplicación
