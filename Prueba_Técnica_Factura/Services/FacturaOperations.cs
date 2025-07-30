@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Prueba_Técnica_Factura.Data;
+using Prueba_Técnica_Factura.DTOs;
 using Prueba_Técnica_Factura.Models;
 
 namespace Prueba_Técnica_Factura.Services
@@ -100,6 +101,40 @@ namespace Prueba_Técnica_Factura.Services
         public async Task<List<Cliente>> GetClientesAsync()
         {
             return await _context.Clientes.ToListAsync();
+        }
+
+        public FacturaDTO MapToDTO(Factura factura)
+        {
+            return new FacturaDTO
+            {
+                FacturaID = factura.FacturaID,
+                ClienteNombre = factura.Cliente?.Nombre ?? "",
+                Fecha = factura.Fecha,
+                Total = factura.Total,
+                Detalles = factura.Detalles.Select(d => new DetalleFacturaDTO
+                {
+                    ProductoNombre = d.Producto?.Nombre ?? "",
+                    Cantidad = d.Cantidad,
+                    PrecioUnitario = d.PrecioUnitario,
+                    Total = d.Total
+                }).ToList()
+            };
+        }
+        public Factura MapFromCreateDTO(FacturaCreateDTO dto)
+        {
+            return new Factura
+            {
+                ClienteID = dto.ClienteID,
+                Fecha = dto.Fecha,
+                Detalles = dto.Detalles.Select(d => new DetalleFactura
+                {
+                    ProductoID = d.ProductoID,
+                    Cantidad = d.Cantidad,
+                    PrecioUnitario = d.PrecioUnitario,
+                    Total = d.Cantidad * d.PrecioUnitario
+                }).ToList(),
+                Total = dto.Detalles.Sum(d => d.Cantidad * d.PrecioUnitario)
+            };
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Prueba_Técnica_Factura.Services;
 using Prueba_Técnica_Factura.Models;
+using Prueba_Técnica_Factura.DTOs;
 
 namespace Prueba_Técnica_Factura.Controllers
 {
@@ -20,7 +21,8 @@ namespace Prueba_Técnica_Factura.Controllers
         public async Task<IActionResult> GetAll()
         {
             var facturas = await _facturaOps.GetAllAsync();
-            return Ok(facturas);
+            var dtoList = facturas.Select(f => _facturaOps.MapToDTO(f)).ToList();
+            return Ok(dtoList);
         }
 
         // GET: api/facturaapi/5
@@ -31,32 +33,35 @@ namespace Prueba_Técnica_Factura.Controllers
             if (factura == null)
                 return NotFound();
 
-            return Ok(factura);
+            var dto = _facturaOps.MapToDTO(factura);
+            return Ok(dto);
         }
 
         // POST: api/facturaapi
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Factura nuevaFactura)
+        public async Task<IActionResult> Create([FromBody] FacturaCreateDTO dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var creada = await _facturaOps.CreateAsync(nuevaFactura);
-            return CreatedAtAction(nameof(GetById), new { id = creada.FacturaID }, creada);
+            var factura = _facturaOps.MapFromCreateDTO(dto);
+            var creada = await _facturaOps.CreateAsync(factura);
+            return CreatedAtAction(nameof(GetById), new { id = creada.FacturaID }, _facturaOps.MapToDTO(creada));
         }
 
         // PUT: api/facturaapi/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Factura facturaActualizada)
+        public async Task<IActionResult> Update(int id, [FromBody] FacturaCreateDTO dto)
         {
-            if (id != facturaActualizada.FacturaID)
-                return BadRequest("El ID no coincide.");
-
             var existe = await _facturaOps.GetByIdAsync(id);
             if (existe == null)
                 return NotFound();
 
-            await _facturaOps.UpdateAsync(facturaActualizada);
+            // Creamos una nueva instancia con los datos del DTO
+            var factura = _facturaOps.MapFromCreateDTO(dto);
+            factura.FacturaID = id;
+
+            await _facturaOps.UpdateAsync(factura);
             return NoContent();
         }
 
