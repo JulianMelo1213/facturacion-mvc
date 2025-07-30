@@ -37,8 +37,7 @@ Prueba_Técnica_Factura/ -Controllers/ -Models/ -Services/ -Views/
 
 1\. Clona el repositorio
 
-git clone https://github.com/JulianMelo1213/facturacion-mvc.git cd
-facturacion-mvc
+git clone https://github.com/JulianMelo1213/facturacion-mvc.git 
 
 2\. Restaura paquetes y compila -dotnet restore -dotnet build
 
@@ -52,4 +51,5 @@ prueba
 
 \"ConnectionStrings\": { \"DefaultConnection\":
 \"Server=.;Database=facturacionDB;Trusted_Connection=True;MultipleActiveResultSets=true\"
-} 5. Ejecuta la aplicación
+} 
+5. Ejecuta la aplicación
